@@ -14,5 +14,5 @@ async def choice_wonki_berry(path_dir, number):
             items_weights.append((item, probability))
 
     result_items = [item for item, _ in random.choices(items_weights, weights=[weight for _, weight in items_weights], k=number)]
-    print(result_items)
+    
     return result_items
