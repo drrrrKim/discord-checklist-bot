@@ -1,8 +1,8 @@
 import os
-import discord
-
+import discord 
 from dotenv import load_dotenv
-from discord.ext import commands, tasks
+
+from discord.ext import commands
 from service import choice_royal, choice_wonki_berry
 
 load_dotenv()
@@ -19,22 +19,19 @@ intents.presences = False
 intents.message_content = True
 
 # bot client 
-bot = commands.Bot(command_prefix=prefix, intents=intents)
+bot = commands.Bot(command_prefix=prefix, intents=intents, help_command=commands.DefaultHelpCommand())
 
 @bot.event
 async def on_ready():
+    await bot.tree.sync()
     print(f'Logged in as {bot.user.name}')
 
-@bot.command()
-async def hello(ctx):
-    await ctx.send("bye")
-
-@bot.command()
-async def 원기베리(ctx, number: int):
-    if number>25:
-        await ctx.send('25개이하로 숫자를 다시 입력')
+@bot.tree.command(name="원기베리",description="숫자만입력해주세요")
+async def 원기베리(interaction:discord.Interaction, 갯수: int):
+    if 갯수>25:
+        await interaction.response.send_message("25이하의 숫자를 입력")
     else:
-        t = await choice_wonki_berry.choice_wonki_berry(path_dir,number)
+        t = await choice_wonki_berry.choice_wonki_berry(path_dir,갯수)
         embed = discord.Embed(
             title="원기베리",
         )
@@ -43,14 +40,14 @@ async def 원기베리(ctx, number: int):
             cnt+=1
             embed.add_field(name=f"{cnt}번째 결과", value=idx, inline=False)
 
-        await ctx.send(embed=embed)
+        await interaction.response.send_message(embed=embed)
 
-@bot.command()
-async def 로얄(ctx, number: int):
-    if number>25:
-        await ctx.send('25개이하로 숫자를 다시 입력')
+@bot.tree.command(name="로얄",description="숫자만입력해주세요")
+async def 로얄(interaction:discord.Interaction, 갯수: int):
+    if 갯수>25:
+        await interaction.response.send_message("25이하의 숫자를 입력")
     else:
-        t = await choice_royal.choice_royal(path_dir,number)
+        t = await choice_royal.choice_royal(path_dir, 갯수)
         embed = discord.Embed(
             title="로얄스타일",
         )
@@ -59,7 +56,7 @@ async def 로얄(ctx, number: int):
             cnt+=1
             embed.add_field(name=f"{cnt}번째 결과", value=idx, inline=False)
 
-        await ctx.send(embed=embed)
+        await interaction.response.send_message(embed=embed)
+
 
 bot.run(token)
-
