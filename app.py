@@ -3,7 +3,7 @@ import discord
 from dotenv import load_dotenv
 
 from discord.ext import commands
-from service import choice_royal, choice_wonki_berry
+from service import choice_royal, choice_wonki_berry, maple_event
 
 load_dotenv()
 path_dir = os.path.dirname(os.path.realpath(__file__))
@@ -92,5 +92,14 @@ async def 데일리(ctx):
 
     for emoji in [cernium,hotel,odium,shangrila,arteria,carcion,urus]:
         await daily_message.add_reaction(emoji)
-        
+
+@bot.command()
+async def 이벤트(ctx):
+    embed = discord.Embed(
+            title="진행중인이벤트",
+        )
+    str_t = await maple_event.maple_event()
+    embed.add_field(name="",value=str_t, inline=False)
+    await ctx.send(embed=embed)
+             
 bot.run(token)
