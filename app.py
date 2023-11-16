@@ -81,4 +81,16 @@ async def 좩(ctx):
     for emoji in [extreme_gold,gc,jh,mvp,exp,vip_exp ]:
         await checklist_message.add_reaction(emoji)
 
+@bot.command()
+async def 데일리(ctx):
+    embed = discord.Embed(
+            title="데일리 숙제",
+        )
+    str_t =f"{cernium} 세르니움\n{hotel} 호텔\n{odium} 오디움\n{shangrila} 도원경 \n{arteria} 아르테리아\n{carcion} 카르시온\n{urus}우르스"
+    embed.add_field(name="",value=str_t, inline=False)
+    daily_message =await ctx.send(embed=embed)
+
+    for emoji in [cernium,hotel,odium,shangrila,arteria,carcion,urus]:
+        await daily_message.add_reaction(emoji)
+        
 bot.run(token)
