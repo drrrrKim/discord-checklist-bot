@@ -3,7 +3,7 @@ import discord
 from dotenv import load_dotenv
 
 from discord.ext import commands
-from service import choice_royal, choice_wonki_berry
+from service import choice_royal, choice_wonki_berry, maple_event
 
 load_dotenv()
 path_dir = os.path.dirname(os.path.realpath(__file__))
@@ -11,6 +11,23 @@ path_dir = os.path.dirname(os.path.realpath(__file__))
 # bot setting
 token = os.environ.get("DISSCODE_TOKEN")
 prefix = '/'
+
+# discord custom emoji id
+extreme_gold = os.environ.get("EXTREME_GOLD")
+gc = os.environ.get("GC")
+jh = os.environ.get("GH")
+mvp = os.environ.get("MVP")
+exp = os.environ.get("EXP")
+vip_doping = os.environ.get("VIP_DOPING")
+vip_exp = os.environ.get("VIP_EXP")
+
+cernium = os.environ.get("CERNIUM")
+hotel = os.environ.get("HOTEL")
+odium = os.environ.get("ODIUM")
+shangrila = os.environ.get("SHANGRILA")
+arteria = os.environ.get("ARTERIA")
+carcion = os.environ.get("CARCION")
+urus = os.environ.get("URUS")
 
 # discord intents setting
 intents = discord.Intents.default()
@@ -58,5 +75,31 @@ async def 로얄(interaction:discord.Interaction, 갯수: int):
 
         await interaction.response.send_message(embed=embed)
 
+@bot.command()
+async def 좩(ctx):
+    checklist_message = await ctx.send(f"재획 List:\n\n{jh} 재획비\n{gc} 경축비\n{mvp} 경뿌 \n{exp} 2배 \n{extreme_gold} 익골\n{vip_exp} vip")
+    for emoji in [extreme_gold,gc,jh,mvp,exp,vip_exp ]:
+        await checklist_message.add_reaction(emoji)
 
+@bot.command()
+async def 데일리(ctx):
+    embed = discord.Embed(
+            title="데일리 숙제",
+        )
+    str_t =f"{cernium} 세르니움\n{hotel} 호텔\n{odium} 오디움\n{shangrila} 도원경 \n{arteria} 아르테리아\n{carcion} 카르시온\n{urus}우르스"
+    embed.add_field(name="",value=str_t, inline=False)
+    daily_message =await ctx.send(embed=embed)
+
+    for emoji in [cernium,hotel,odium,shangrila,arteria,carcion,urus]:
+        await daily_message.add_reaction(emoji)
+
+@bot.command()
+async def 이벤트(ctx):
+    embed = discord.Embed(
+            title="진행중인이벤트",
+        )
+    str_t = await maple_event.maple_event()
+    embed.add_field(name="",value=str_t, inline=False)
+    await ctx.send(embed=embed)
+             
 bot.run(token)
