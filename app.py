@@ -12,8 +12,7 @@ load_dotenv()
 path_dir = os.path.dirname(os.path.realpath(__file__))
 
 # bot setting
-# token = os.environ.get("DISSCODE_TOKEN")
-token = os.environ.get("TEST_DISSCODE_TOKEN")
+token = os.environ.get("DISSCODE_TOKEN")
 
 prefix = '/'
 
@@ -69,6 +68,7 @@ async def 로얄(interaction:discord.Interaction,
         embed.add_field(name=f"{idx}번째 결과", value=val, inline=False)
 
     await interaction.response.send_message(embed=embed)
+
 
 # symbol
 @bot.tree.command(name="어센틱")
@@ -129,8 +129,9 @@ async def 이벤트(ctx):
     embed = discord.Embed(
             title="진행중인이벤트",
         )
-    str_t = await maple_event.maple_event()
-    embed.add_field(name="",value=str_t, inline=False)
+    event_data = await maple_event.maple_event(path_dir)
+    for val in event_data:
+        embed.add_field(name=val[1], value=f"[{val[0]}]({val[2]})", inline=False)
     await ctx.send(embed=embed)
 
 @bot.event
@@ -138,8 +139,5 @@ async def on_ready():
     await bot.tree.sync()
     print(f'Logged in as {bot.user.name}')
 
-@bot.command()
-async def hello(ctx):
-    await ctx.send('bye')
 
 bot.run(token)
