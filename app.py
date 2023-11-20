@@ -6,14 +6,14 @@ from typing import Optional
 from discord.ext import commands
 from discord import app_commands
 
-from service import choice_royal, choice_wonki_berry, maple_event, symbol_cost
+from service import choice, maple_event, symbol_cost
 
 load_dotenv()
 path_dir = os.path.dirname(os.path.realpath(__file__))
 
 # bot setting
-token = os.environ.get("DISSCODE_TOKEN")
-# token = os.environ.get("TEST_DISSCODE_TOKEN")
+# token = os.environ.get("DISSCODE_TOKEN")
+token = os.environ.get("TEST_DISSCODE_TOKEN")
 
 prefix = '/'
 
@@ -43,37 +43,32 @@ intents.message_content = True
 # bot client 
 bot = commands.Bot(command_prefix=prefix, intents=intents, help_command=commands.DefaultHelpCommand())
 
-@bot.tree.command(name="원기베리",description="숫자만입력해주세요")
-async def 원기베리(interaction:discord.Interaction, 갯수: int):
-    if 갯수>25:
-        await interaction.response.send_message("25이하의 숫자를 입력")
-    else:
-        t = await choice_wonki_berry.choice_wonki_berry(path_dir,갯수)
-        embed = discord.Embed(
-            title="원기베리",
-        )
-        cnt=0
-        for idx in t:
-            cnt+=1
-            embed.add_field(name=f"{cnt}번째 결과", value=idx, inline=False)
+# choice_item
+@bot.tree.command(name="원기베리",
+                  description="숫자만입력해주세요")
+async def 원기베리(interaction:discord.Interaction,
+               갯수: app_commands.Range[int,1,25]):
+    res_data = await choice.choice_wonki_berry(path_dir,갯수)
+    embed = discord.Embed(
+        title="원기베리",
+    )
+    for idx,val in enumerate(res_data, start=1):
+        embed.add_field(name=f"{idx}번째 결과", value=val, inline=False)
 
-        await interaction.response.send_message(embed=embed)
+    await interaction.response.send_message(embed=embed)
 
-@bot.tree.command(name="로얄",description="숫자만입력해주세요")
-async def 로얄(interaction:discord.Interaction, 갯수: int):
-    if 갯수>25:
-        await interaction.response.send_message("25이하의 숫자를 입력")
-    else:
-        t = await choice_royal.choice_royal(path_dir, 갯수)
-        embed = discord.Embed(
-            title="로얄스타일",
-        )
-        cnt=0
-        for idx in t:
-            cnt+=1
-            embed.add_field(name=f"{cnt}번째 결과", value=idx, inline=False)
+@bot.tree.command(name="로얄",
+                  description="숫자만입력해주세요")
+async def 로얄(interaction:discord.Interaction,
+             갯수: app_commands.Range[int,1,25]):
+    res_data = await choice.choice_royal(path_dir, 갯수)
+    embed = discord.Embed(
+        title="로얄스타일",
+    )
+    for idx,val in enumerate(res_data, start=1):
+        embed.add_field(name=f"{idx}번째 결과", value=val, inline=False)
 
-        await interaction.response.send_message(embed=embed)
+    await interaction.response.send_message(embed=embed)
 
 # symbol
 @bot.tree.command(name="어센틱")
