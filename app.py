@@ -107,6 +107,12 @@ async def 좩(ctx):
         await checklist_message.add_reaction(emoji)
 
 @bot.command()
+async def 보스(ctx):
+    checklist_message = await ctx.send(f"{vip_doping} vip\n")
+    for emoji in [vip_doping ]:
+        await checklist_message.add_reaction(emoji)
+
+@bot.command()
 async def 데일리(ctx):
     embed = discord.Embed(
             title="데일리 숙제",
