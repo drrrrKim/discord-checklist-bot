@@ -1,15 +1,20 @@
 import os
 import discord 
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
+from typing import Optional
 from discord.ext import commands
-from service import choice_royal, choice_wonki_berry, maple_event
+from discord import app_commands
+
+from service import choice_royal, choice_wonki_berry, maple_event, symbol_cost
 
 load_dotenv()
 path_dir = os.path.dirname(os.path.realpath(__file__))
 
 # bot setting
 token = os.environ.get("DISSCODE_TOKEN")
+# token = os.environ.get("TEST_DISSCODE_TOKEN")
+
 prefix = '/'
 
 # discord custom emoji id
@@ -37,11 +42,6 @@ intents.message_content = True
 
 # bot client 
 bot = commands.Bot(command_prefix=prefix, intents=intents, help_command=commands.DefaultHelpCommand())
-
-@bot.event
-async def on_ready():
-    await bot.tree.sync()
-    print(f'Logged in as {bot.user.name}')
 
 @bot.tree.command(name="원기베리",description="숫자만입력해주세요")
 async def 원기베리(interaction:discord.Interaction, 갯수: int):
@@ -75,6 +75,36 @@ async def 로얄(interaction:discord.Interaction, 갯수: int):
 
         await interaction.response.send_message(embed=embed)
 
+# symbol
+@bot.tree.command(name="어센틱")
+@app_commands.choices(
+    그란디스=[
+        app_commands.Choice(name='세르니움', value=2),
+        app_commands.Choice(name='아르크스', value=3),
+        app_commands.Choice(name='오디움', value=4),
+        app_commands.Choice(name='도원경', value=5),
+        app_commands.Choice(name='아르테리아', value=6),
+        app_commands.Choice(name='카르시온', value=7),
+    ]
+)
+async def symbol_calc(interaction:discord.Interaction,
+                      그란디스: app_commands.Choice[int],
+                      시작레벨: app_commands.Range[int,1,11],
+                      목표레벨: app_commands.Range[int,1,11]):
+    if 시작레벨>=목표레벨:
+        await interaction.response.send_message("시작레벨은 목표레벨보다 낮아야합니다.")
+    else:
+        price, symbol  = await symbol_cost.symbol_cost(path_dir,그란디스.value,시작레벨,목표레벨)
+        embed = discord.Embed(
+            title=f"{그란디스.name} {시작레벨}레벨에서 {목표레벨}레벨까지 심볼비용은?",
+        )
+        price = f'{price:,.0f}'
+        
+        embed.add_field(name="심볼(개)", value=symbol, inline=False)
+        embed.add_field(name="가격(메소)", value=price, inline=False)
+
+        await interaction.response.send_message(embed=embed)
+
 @bot.command()
 async def 좩(ctx):
     checklist_message = await ctx.send(f"재획 List:\n\n{jh} 재획비\n{gc} 경축비\n{mvp} 경뿌 \n{exp} 2배 \n{extreme_gold} 익골\n{vip_exp} vip")
@@ -101,5 +131,14 @@ async def 이벤트(ctx):
     str_t = await maple_event.maple_event()
     embed.add_field(name="",value=str_t, inline=False)
     await ctx.send(embed=embed)
-             
+
+@bot.event
+async def on_ready():
+    await bot.tree.sync()
+    print(f'Logged in as {bot.user.name}')
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send('bye')
+
 bot.run(token)
