@@ -41,7 +41,7 @@ def crawling_royal():
 def csv_royal(headers, dataset):
     try:
         csv_file_path = '../data/royal.csv'
-        with open(csv_file_path, '', newline='', encoding='utf-8') as csvfile:
+        with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
 
             writer = csv.DictWriter(csvfile, fieldnames=headers)
             writer.writeheader()
