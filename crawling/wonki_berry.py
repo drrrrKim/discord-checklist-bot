@@ -52,5 +52,3 @@ def csv_wonki_berry(headers, dataset):
     except Exception as e:
         print(e)
         return False
-
-crawling_wonki_berry()
