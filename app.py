@@ -7,6 +7,7 @@ from discord.ext import commands
 from discord import app_commands
 
 from service import choice, maple_event, symbol_cost
+from crawling import maple_ranking
 
 load_dotenv()
 path_dir = os.path.dirname(os.path.realpath(__file__))
@@ -133,6 +134,12 @@ async def 이벤트(ctx):
     for val in event_data:
         embed.add_field(name=val[1], value=f"[{val[0]}]({val[2]})", inline=False)
     await ctx.send(embed=embed)
+
+@bot.command()
+async def 냉교(ctx):
+    await maple_ranking.maple_ranking(path_dir,"냉교")
+    channel = bot.get_channel(1167135610327269426)
+    await channel.send(file=discord.File('test.png'))
 
 @bot.event
 async def on_ready():

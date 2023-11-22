@@ -6,62 +6,74 @@ from bs4 import BeautifulSoup
 from PIL import Image
 
 import requests
-# Setup chrome driver
-driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-driver.set_window_size(2000, 1500)
+import os
 
-url = "https://maplestory.nexon.com/N23Ranking/World/Total?c=%EB%83%89%EA%B5%90&j=13&w=00"
-driver.get('https://maplestory.nexon.com/N23Ranking/World/Total?c=%EB%83%89%EA%B5%90&j=13&w=0')
+async def maple_ranking(path_dir,username):
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+    driver.set_window_size(2000, 1500)
 
-res = requests.get(url)
-content = res.text
-soup = BeautifulSoup(content, 'html.parser')
-target_rows = soup.select('#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr:-soup-contains("냉교")')
+    url = f"https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w=00"
+    driver.get(f'https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w=0')
 
-id_index=0
-# # 원하는 태그의 인덱스를 찾습니다.
-for index, row in enumerate(soup.select('#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr')):
-    if row in target_rows:
-        id_index=index+1
-        # print(f"Target row is at index {index}")
+    res = requests.get(url)
+    content = res.text
+    soup = BeautifulSoup(content, 'html.parser')
+    target_user_name = soup.select(f'#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr:-soup-contains({username})')
 
-arr=[]
-arr.append(id_index)
-if id_index-1>0:
-    arr.append(id_index-1)
-if id_index-2>0:
-    arr.append(id_index-2)
-if id_index+1<11:
-    arr.append(id_index+1)
-if id_index+2<11:
-    arr.append(id_index+2)
-arr.sort()
-print(arr)
-for idx in arr:
-    myform = driver.find_element(By.CSS_SELECTOR, f'#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody>tr:nth-child({idx})')
-    myform.screenshot(f"../ranking_image/{idx}.png")
+    user_index=0
 
-# 이미지를 엽니다.
-image1 = Image.open("6.png")
-image2 = Image.open("7.png")
+    for index, row in enumerate(soup.select('#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr')):
+        if row in target_user_name:
+            user_index=index+1
 
-# 이미지의 크기를 가져옵니다.
-width1, height1 = image1.size
-width2, height2 = image2.size
+    arr=[]
+    arr.append(user_index)
+    if user_index-1>0:
+        arr.append(user_index-1)
+    if user_index-2>0:
+        arr.append(user_index-2)
+    if user_index+1<11:
+        arr.append(user_index+1)
+    if user_index+2<11:
+        arr.append(user_index+2)
+    arr.sort()
+    print(arr)
+    for idx in arr:
+        myform = driver.find_element(By.CSS_SELECTOR, f'#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody>tr:nth-child({idx})')
+        myform.screenshot(f"{path_dir}/ranking_image/{idx}.png")
 
-# 두 이미지를 수평으로 합칩니다.
-combined_image = Image.new('RGB', (max(width1, width2), height1 + height2+height1))
-combined_image.paste(image1, (0, 0))
-combined_image.paste(image2, (0, height1))
-combined_image.paste(image2, (0, height1+height1))
+    folder_path=f'{path_dir}/ranking_image'
+    files = os.listdir(folder_path)
 
-# for file in files:
-#     file_path = os.path.join(folder_path, file)
-#     if os.path.isfile(file_path) and file.lower().endswith(".png"):
-#         folder_name = os.path.basename(os.path.dirname(file_path))
-#         print(f"Folder name for {file}: {folder_name}")
+    img_path=[]
+    for file in files:
+        file_path = os.path.join(folder_path, file)
+        if os.path.isfile(file_path) and file.lower().endswith(".png"):
+            img_path.append(file_path)
+    img_path = sorted(img_path, key=lambda x: int(x.split('\\')[-1].split('.')[0]))
 
-# 합쳐진 이미지를 저장합니다.
-combined_image.save("combined_image.png")
-driver.quit()
+    result_image=Image.open(img_path[0])
+    for img in img_path[1:]:
+        image1 = result_image
+        image2 = Image.open(img)
+
+        width1, height1 = image1.size
+        width2, height2 = image2.size
+
+        combined_image = Image.new('RGB', (max(width1, width2), height1 + height2))
+        combined_image.paste(image1, (0, 0))
+        combined_image.paste(image2, (0, height1))
+        result_image=combined_image
+
+    result_image.save(f"{path_dir}/test.png")
+    driver.quit()
+    try:
+        files = os.listdir(folder_path)
+
+        for file in files:
+            file_path = os.path.join(folder_path, file)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+    except Exception as e:
+        print(f"error: {e}")
 
