@@ -1,27 +1,28 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from PIL import Image
+
+from selenium import webdriver
 
 import requests
 import os
 
 async def maple_ranking(path_dir,username):
-    option = webdriver.ChromeOptions()
-    option.add_argument("--headless")
-    
-    option.add_argument('--no-sandbox')
-    option.add_argument('--disable-dev-shm-usage')
-    option.binary_location = '/usr/bin/google-chrome-stable'
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     print('1')
-    driver = webdriver.Chrome(options=option)
-    # driver = webdriver.Chrome()
+
     print('2')
 
-    driver.set_window_size(2000, 1500)
-    print('3')
+    # driver.set_window_size(2000, 1500)
+    print('2')
 
     url = f"https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w=00"
     driver.get(f'https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w=0')
