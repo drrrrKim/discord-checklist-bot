@@ -14,10 +14,15 @@ async def maple_ranking(path_dir,username):
 
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
+    print('1')
+    print(user_name)
     
     driver = webdriver.Chrome(options=chrome_options)
-
+    print('2')
+    
+    print(user_name)
     driver.set_window_size(2000, 1500)
+    print('3')
     print(user_name)
     url = f"https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w=00"
     driver.get(f'https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w=0')
