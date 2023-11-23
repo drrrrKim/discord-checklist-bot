@@ -16,8 +16,9 @@ async def maple_ranking(path_dir,username):
     # chrome_options.add_argument('--disable-dev-shm-usage')
     print('1')
     print(username)
-    
-    driver = webdriver.Chrome()
+    options = webdriver.ChromeOptions()
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+    # driver = webdriver.Chrome()
     print('2')
     
     print(username)
