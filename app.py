@@ -136,7 +136,8 @@ async def 이벤트(ctx):
     await ctx.send(embed=embed)
 
 @bot.command()
-async def 냉교(ctx):
+async def 냉교():
+    print('start')
     await maple_ranking.maple_ranking(path_dir,"냉교")
     channel = bot.get_channel(1167135610327269426)
     await channel.send(file=discord.File('test.png'))
