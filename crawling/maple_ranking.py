@@ -62,7 +62,9 @@ async def maple_ranking(path_dir,username):
         file_path = os.path.join(folder_path, file)
         if os.path.isfile(file_path) and file.lower().endswith(".png"):
             img_path.append(file_path)
-    img_path = sorted(img_path, key=lambda x: int(x.split('\\')[-1].split('.')[0]))
+    # img_path = sorted(img_path, key=lambda x: int(x.split('\\')[-1].split('.')[0]))
+    img_path = sorted(img_path, key=lambda x: int(x.split('/')[-1].split('.')[0]))
+
 
     result_image=Image.open(img_path[0])
     for img in img_path[1:]:
