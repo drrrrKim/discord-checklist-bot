@@ -9,6 +9,7 @@ import requests
 import os
 
 async def maple_ranking(path_dir,username):
+    print('sucess 3')
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")
     print('sucess 1')
