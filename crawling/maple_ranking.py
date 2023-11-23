@@ -9,13 +9,13 @@ import requests
 import os
 
 async def maple_ranking(path_dir,username):
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--headless")
+    option = webdriver.ChromeOptions()
+    option.add_argument("--headless")
 
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
+    option.add_argument('--no-sandbox')
+    option.add_argument('--disable-dev-shm-usage')
     print('1')
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(options=option)
     # driver = webdriver.Chrome()
     print('2')
 
