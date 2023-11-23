@@ -11,9 +11,10 @@ import os
 async def maple_ranking(path_dir,username):
     option = webdriver.ChromeOptions()
     option.add_argument("--headless")
-
+    
     option.add_argument('--no-sandbox')
     option.add_argument('--disable-dev-shm-usage')
+    option.binary_location = '/usr/bin/google-chrome-stable'
     print('1')
     driver = webdriver.Chrome(options=option)
     # driver = webdriver.Chrome()
