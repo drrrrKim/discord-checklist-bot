@@ -9,9 +9,15 @@ import requests
 import os
 
 async def maple_ranking(path_dir,username):
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-    # chrome_driver_path = "/usr/lib/chromium-browser/chromedriver"
-    # driver = webdriver.Chrome(executable_path=chrome_driver_path)
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")
+    
+
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    
+    driver = webdriver.Chrome(excutable_path ='/usr/lib/chromedriver',chrome_options=chrome_options)
+
     driver.set_window_size(2000, 1500)
 
     url = f"https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w=00"
