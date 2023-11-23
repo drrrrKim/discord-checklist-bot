@@ -11,7 +11,7 @@ import os
 async def maple_ranking(path_dir,username):
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")
-    
+    print('sucess 1')
 
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
@@ -22,7 +22,7 @@ async def maple_ranking(path_dir,username):
 
     url = f"https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w=00"
     driver.get(f'https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w=0')
-
+    print('sucess 2')
     res = requests.get(url)
     content = res.text
     soup = BeautifulSoup(content, 'html.parser')
@@ -33,7 +33,7 @@ async def maple_ranking(path_dir,username):
     for index, row in enumerate(soup.select('#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr')):
         if row in target_user_name:
             user_index=index+1
-
+    print('sucess 3')
     arr=[]
     arr.append(user_index)
     if user_index-1>0:
