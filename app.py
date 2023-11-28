@@ -6,7 +6,7 @@ from typing import Optional
 from discord.ext import commands
 from discord import app_commands
 
-from service import choice, maple_event, symbol_cost
+from service import choice, maple_event, symbol_cost, kms_migration
 from crawling import maple_ranking
 
 load_dotenv()
@@ -140,7 +140,12 @@ async def 냉교(ctx):
     print('start')
     await maple_ranking.maple_ranking(path_dir,"냉교")
     channel = bot.get_channel(1167135610327269426)
+
     await channel.send(file=discord.File('test.png'))
+@bot.command()
+async def kms_update(ctx):
+    await kms_migration.kms_migration(path_dir)
+    await ctx.send("진행완료")
 
 @bot.event
 async def on_ready():

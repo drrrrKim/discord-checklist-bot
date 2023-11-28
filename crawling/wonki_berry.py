@@ -5,7 +5,7 @@ import os
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-def crawling_wonki_berry():
+async def crawling_wonki_berry(path_dir):
     load_dotenv()
     url = os.environ.get("WONKI_BERRY_URL")
 
@@ -28,7 +28,7 @@ def crawling_wonki_berry():
             columns = [col.get_text(strip=True) for col in reversed(row.find_all('td'))]
             dataset.append(dict(zip(headers, columns)))
         
-        if csv_wonki_berry(headers,dataset):
+        if await csv_wonki_berry(headers,dataset,path_dir):
             print('create csv sucess')
             return True
         else:
@@ -38,9 +38,9 @@ def crawling_wonki_berry():
         print('table no data')
         return False
 
-def csv_wonki_berry(headers, dataset):
+async def csv_wonki_berry(headers, dataset, path_dir):
     try:
-        csv_file_path = '../data/wonkiberry.csv'
+        csv_file_path = f'{path_dir}/data/wonkiberry.csv'
         with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
 
             writer = csv.DictWriter(csvfile, fieldnames=headers)
