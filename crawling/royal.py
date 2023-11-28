@@ -5,7 +5,7 @@ import os
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-def crawling_royal():
+async def crawling_royal(path_dir):
     load_dotenv()
     url = os.environ.get("ROYAL_URL")
 
@@ -28,7 +28,7 @@ def crawling_royal():
             columns = [col.get_text(strip=True) for col in reversed(row.find_all('td'))]
             dataset.append(dict(zip(headers, columns)))
         
-        if csv_royal(headers,dataset):
+        if await csv_royal(headers,dataset,path_dir):
             print('create csv sucess')
             return True
         else:
@@ -38,9 +38,9 @@ def crawling_royal():
         print('table no data')
         return False
 
-def csv_royal(headers, dataset):
+async def csv_royal(headers, dataset,path_dir):
     try:
-        csv_file_path = '../data/royal.csv'
+        csv_file_path = f'{path_dir}/data/royal.csv'
         with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
 
             writer = csv.DictWriter(csvfile, fieldnames=headers)
