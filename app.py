@@ -13,8 +13,8 @@ load_dotenv()
 path_dir = os.path.dirname(os.path.realpath(__file__))
 
 # bot setting
-# token = os.environ.get("DISSCODE_TOKEN")
-token = os.environ.get("TEST_DISSCODE_TOKEN")
+token = os.environ.get("DISSCODE_TOKEN")
+
 
 
 prefix = '/'
