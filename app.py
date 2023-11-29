@@ -13,7 +13,9 @@ load_dotenv()
 path_dir = os.path.dirname(os.path.realpath(__file__))
 
 # bot setting
-token = os.environ.get("DISSCODE_TOKEN")
+# token = os.environ.get("DISSCODE_TOKEN")
+token = os.environ.get("TEST_DISSCODE_TOKEN")
+
 
 prefix = '/'
 
@@ -137,11 +139,18 @@ async def 이벤트(ctx):
 
 @bot.command()
 async def 냉교(ctx):
-    print('start')
-    await maple_ranking.maple_ranking(path_dir,"냉교")
-    channel = bot.get_channel(1167135610327269426)
+    await maple_ranking.maple_ranking(path_dir,"냉교",0)
+    channel = bot.get_channel(1176796365372796978)
 
     await channel.send(file=discord.File('test.png'))
+
+@bot.command()
+async def 베라냉교(ctx):
+    await maple_ranking.maple_ranking(path_dir,"냉교",11)
+    channel = bot.get_channel(1176796365372796978)
+
+    await channel.send(file=discord.File('test.png'))
+
 @bot.command()
 async def kms_update(ctx):
     await kms_migration.kms_migration(path_dir)
