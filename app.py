@@ -16,7 +16,6 @@ path_dir = os.path.dirname(os.path.realpath(__file__))
 token = os.environ.get("DISSCODE_TOKEN")
 
 
-
 prefix = '/'
 
 # discord custom emoji id
@@ -103,6 +102,33 @@ async def symbol_calc(interaction:discord.Interaction,
 
         await interaction.response.send_message(embed=embed)
 
+@bot.tree.command(name="랭킹")
+@app_commands.choices(
+    범위 =[
+        app_commands.Choice(name='전체',value=0),
+        app_commands.Choice(name='베라',value=11)
+    ],
+    직업 = [
+        app_commands.Choice(name='전체',value=''),
+        app_commands.Choice(name='갓루미',value='&j=13'),
+        app_commands.Choice(name='듀블',value='&j=4&d=34')
+    ],
+    아이디=[
+        app_commands.Choice(name='냉교',value='냉교'),
+        app_commands.Choice(name='디러',value='디러')
+    ]
+)
+async def 랭킹(interaction:discord.Interaction,
+                      범위: app_commands.Choice[int],
+                      직업 : app_commands.Choice[str],
+                      아이디 : app_commands.Choice[str]):
+    channel = bot.get_channel(1167135610327269426)
+    
+    await maple_ranking.maple_ranking(path_dir,아이디.value,범위.value,직업.value)
+
+    await channel.send(file=discord.File('test.png'))
+
+
 @bot.command()
 async def 좩(ctx):
     checklist_message = await ctx.send(f"재획 List:\n\n{jh} 재획비\n{gc} 경축비\n{mvp} 경뿌 \n{exp} 2배 \n{extreme_gold} 익골\n{vip_exp} vip")
@@ -137,13 +163,9 @@ async def 이벤트(ctx):
         embed.add_field(name=val[1], value=f"[{val[0]}]({val[2]})", inline=False)
     await ctx.send(embed=embed)
 
-@bot.command()
-async def 냉교(ctx):
-    await maple_ranking.maple_ranking(path_dir,"냉교",0)
-    channel = bot.get_channel(1167135610327269426)
 
-    await channel.send(file=discord.File('test.png'))
 
+#11베라
 @bot.command()
 async def 베라냉교(ctx):
     await maple_ranking.maple_ranking(path_dir,"냉교",11)

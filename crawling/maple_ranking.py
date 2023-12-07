@@ -11,7 +11,7 @@ import requests
 import os
 
 
-async def maple_ranking(path_dir,username, bera):
+async def maple_ranking(path_dir,username, bera, job):
     with ThreadPoolExecutor() as executor:
         options = Options()
         options.add_argument('--headless')
@@ -22,8 +22,8 @@ async def maple_ranking(path_dir,username, bera):
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
         driver.implicitly_wait(10)
 
-        url = f"https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w={bera}"
-        driver.get(f'https://maplestory.nexon.com/N23Ranking/World/Total?c={username}&j=13&w={bera}')
+        url = f"https://maplestory.nexon.com/N23Ranking/World/Total?c={username}{job}&w={bera}"
+        driver.get(f'https://maplestory.nexon.com/N23Ranking/World/Total?c={username}{job}&w={bera}')
 
         res = requests.get(url)
         content = res.text
