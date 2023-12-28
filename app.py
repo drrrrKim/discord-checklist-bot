@@ -165,14 +165,6 @@ async def 이벤트(ctx):
 
 
 
-#11베라
-@bot.command()
-async def 베라냉교(ctx):
-    await maple_ranking.maple_ranking(path_dir,"냉교",11)
-    channel = bot.get_channel(1167135610327269426)
-
-    await channel.send(file=discord.File('test.png'))
-
 @bot.command()
 async def kms_update(ctx):
     await kms_migration.kms_migration(path_dir)
