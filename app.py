@@ -125,9 +125,7 @@ async def 랭킹(interaction:discord.Interaction,
     channel = bot.get_channel(1167135610327269426)
     
     await maple_ranking.maple_ranking(path_dir,아이디.value,범위.value,직업.value)
-    await interaction.channel.send(file=discord.File('test.png'))
-
-    # await channel.send(file=discord.File('test.png'))
+    await channel.send(file=discord.File('test.png'))
 
 
 @bot.command()
@@ -163,7 +161,6 @@ async def 이벤트(ctx):
     for val in event_data:
         embed.add_field(name=val[1], value=f"[{val[0]}]({val[2]})", inline=False)
     await ctx.send(embed=embed)
-
 
 
 @bot.command()
