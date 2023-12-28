@@ -1,19 +1,23 @@
 import os
 import discord 
+import requests
 
 from dotenv import load_dotenv
 from typing import Optional
 from discord.ext import commands
 from discord import app_commands
 
-from service import choice, maple_event, symbol_cost, kms_migration
+from service import choice, maple_event, symbol_cost, kms_migration, boncae
 from crawling import maple_ranking
 
 load_dotenv()
 path_dir = os.path.dirname(os.path.realpath(__file__))
 
 # bot setting
-token = os.environ.get("DISSCODE_TOKEN")
+# token = os.environ.get("DISSCODE_TOKEN")
+token = os.environ.get("TEST_DISSCODE_TOKEN")
+
+nexon = os.environ.get("NEXON_API")
 
 
 prefix = '/'
@@ -161,6 +165,14 @@ async def 이벤트(ctx):
     for val in event_data:
         embed.add_field(name=val[1], value=f"[{val[0]}]({val[2]})", inline=False)
     await ctx.send(embed=embed)
+
+@bot.command()
+async def 본캐(ctx):
+    text = ctx.message.content.split()
+    find_name=text[1]
+    res = await boncae.find_boncae(find_name, nexon)
+    await ctx.send(res)
+    
 
 
 @bot.command()
